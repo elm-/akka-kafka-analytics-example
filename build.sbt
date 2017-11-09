@@ -75,8 +75,8 @@ val defaultLib = Seq(
       "org.slf4s"         %% "slf4s-api"                         % slf4sV,
       "ch.qos.logback"     % "logback-classic"                   % logbackV,
       "com.github.blemale" %% "scaffeine"                        % scaffeineVersion,
-      "net.manub"         %% "scalatest-embedded-kafka" % "0.15.1",
-      "org.slf4j"         %  "log4j-over-slf4j"         % "1.7.21")
+      "net.manub"         %% "scalatest-embedded-kafka"          % "0.15.1",
+      "org.slf4j"         %  "log4j-over-slf4j"                  % "1.7.21",
       "org.specs2"        %% "specs2-core"                       % specs2Version    % Test,
       "org.specs2"        %% "specs2-mock"                       % specs2Version    % Test,
       "com.typesafe.akka" %% "akka-http-testkit"                 % akkaHttpV        % Test,
