@@ -7,7 +7,7 @@ import akka.stream.Materializer
 import akka.stream.scaladsl.Sink
 import com.typesafe.scalalogging.StrictLogging
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.elmarweber.github.akkakafkaexample.lib.AnalyticsEvent
+import org.elmarweber.github.akkakafkaexample.lib.{AnalyticsEvent, EnrichedAnalyticsEvent}
 import spray.json._
 
 import scala.concurrent.duration._
@@ -18,9 +18,9 @@ trait StatisticsStream extends StrictLogging {
                    sourceTopic: String, targetTopic: String)(implicit fmt: Materializer) = {
     Consumer.committableSource(consumerSettings, Subscriptions.topics(sourceTopic))
       .map { msg =>
-        (msg.record.value().parseJson.convertTo[AnalyticsEvent], msg.committableOffset)
+        (msg.record.value().parseJson.convertTo[EnrichedAnalyticsEvent], msg.committableOffset)
       }
-      .groupBy(1024, { case (event, _) => event.songTitle })
+      .groupBy(1024, { case (event, _) => event.artist })
       .groupedWithin(Integer.MAX_VALUE, 10.seconds)
       .map { groupedData =>
         val events = groupedData.map(_._1)
@@ -28,8 +28,8 @@ trait StatisticsStream extends StrictLogging {
         val batchOffset = offsets.foldLeft(CommittableOffsetBatch.empty) { case (batch, offset) => batch.updated(offset) }
         val playCount = events.size
         val windowEnd = System.currentTimeMillis()
-        val key = s"${events.head.songTitle}_${windowEnd}"
-        logger.info(s"Aggregated for '${events.head.songTitle}' ${playCount} play events")
+        val key = s"${events.head.artist}_${windowEnd}"
+        logger.info(s"Aggregated for artist '${events.head.artist}' ${playCount} play events")
         ProducerMessage.Message(new ProducerRecord(targetTopic, key, playCount.toString), batchOffset)
       }
       .mergeSubstreams
