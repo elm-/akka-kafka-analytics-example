@@ -51,7 +51,7 @@ val commonDockerSettings = Seq(
 
 val defaultLib = Seq(
   libraryDependencies ++= {
-    val akkaV            = "2.5.3"
+    val akkaV            = "2.5.6"
     val akkaHttpV        = "10.0.9"
     val slf4sV           = "1.7.10"
     val logbackV         = "1.1.3"
