@@ -32,8 +32,8 @@ object EnrichmentBoot extends App with StrictLogging {
     EnrichmentConfiguration.kafka.sourceTopic, EnrichmentConfiguration.kafka.targetTopic)
 
 
-  streamFuture.onFailure { case ex =>
-    logger.error(s"Stream filed unexpectedly: ${ex.getMessage}", ex)
-    sys.exit(1)
-  }
+//  streamFuture.onFailure { case ex =>
+//    logger.error(s"Stream filed unexpectedly: ${ex.getMessage}", ex)
+//    sys.exit(1)
+//  }
 }

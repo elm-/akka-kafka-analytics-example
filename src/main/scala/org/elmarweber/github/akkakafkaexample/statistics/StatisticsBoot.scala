@@ -29,8 +29,8 @@ object StatisticsBoot extends App with StrictLogging {
     StatisticsConfiguration.kafka.sourceTopic, StatisticsConfiguration.kafka.targetTopic)
 
 
-  streamFuture.onFailure { case ex =>
-    logger.error(s"Stream filed unexpectedly: ${ex.getMessage}", ex)
-    sys.exit(1)
-  }
+//  streamFuture.onFailure { case ex =>
+//    logger.error(s"Stream filed unexpectedly: ${ex.getMessage}", ex)
+//    sys.exit(1)
+//  }
 }

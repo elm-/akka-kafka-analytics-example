@@ -12,18 +12,7 @@ import spray.json._
 
 trait EventsToKafkaStream extends StrictLogging {
   def createStream(producerSettings: ProducerSettings[String, String], topic: String)(implicit fmt: Materializer) = {
-    val (queue, future) = Source.queue[AnalyticsEvent](1024, OverflowStrategy.backpressure)
-      .map { event =>
-        logger.debug(s"Received event ${event.id} from ${event.clientId}")
-        event
-      }
-      .map { event =>
-        ProducerMessage.Message(new ProducerRecord[String, String](topic, event.id, event.toJson.toString), NotUsed)
-      }
-      .via(Producer.flow(producerSettings))
-      .toMat(Sink.ignore)(Keep.both)
-      .run()
-    (queue, future)
+    // create a queue and push data to kafka topic
   }
 }
 
