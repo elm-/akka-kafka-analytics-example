@@ -10,7 +10,7 @@ import akka.http.scaladsl.settings._
 import akka.http.scaladsl.unmarshalling.Unmarshal
 import akka.stream.Materializer
 import akka.stream.scaladsl._
-import org.apache.commons.lang3.StringUtils
+import org.asynchttpclient.util.StringUtils
 import org.elmarweber.github.akkakafkaexample.lib.HttpClient.{HttpScheme, HttpsScheme, Scheme}
 import org.slf4s.Logging
 import spray.json._
@@ -89,7 +89,7 @@ class HttpClient(
     if (!clean.startsWith("/"))
       clean = "/" + clean
     if (clean.endsWith("/"))
-      clean = StringUtils.removeEnd(clean, "/")
+      clean = clean.substring(0, clean.size - "/".size)
     clean
   }
   private val pool = scheme match {
