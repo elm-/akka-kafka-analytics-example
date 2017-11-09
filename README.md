@@ -1,3 +1,5 @@
 # akka-kafka-analytics-example #
 
-A simple stream that gathers stats about how often keys occur.
+An example for an intro workshop for the Scala Academy to show some principles around akka-http, 
+Kafka, analytics and streams.
+
