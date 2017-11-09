@@ -20,29 +20,5 @@ object MobileClientSim extends App {
   implicit val ec = system.dispatcher
   implicit val materializer = ActorMaterializer()
 
-  val gatewayClient = HttpClient.fromEndpoint(MobileClientConfiguration.gateway.endpoint).build()
-
-
-  while (true) {
-    val event = createEvent()
-    val request = RequestBuilding.Post("/api/events", event)
-    Await.result(gatewayClient.doCheckedRest(request), 1.second)
-    Thread.sleep(50)
-  }
-
-  def createEvent() = {
-    AnalyticsEvent(
-      id = UUID.randomUUID().toString(),
-      clientId = Random.shuffle(ClientIds).head,
-      songTitle = "test",
-      ip = "127.0.0.1"
-    )
-  }
-
-  def ClientIds = List(
-    "elmar",
-    "john",
-    "jack",
-    "mark"
-  )
+  // sent one or more AnalyticsEvent to /api/events
 }
