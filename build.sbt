@@ -32,13 +32,6 @@ lazy val commonSettings = Seq(
   publishMavenStyle := true,
   publishArtifact in Test := false,
   pomIncludeRepository := { x => false },
-  publishTo <<= version { v: String =>
-      val nexus = "https://test.cupenya.com/nexus/content/repositories"
-      if (v.trim.endsWith("SNAPSHOT"))
-        Some("snapshots" at nexus + "/snapshots")
-      else
-        Some("releases" at nexus + "/releases")
-  },
   publishArtifact in (Compile, packageDoc) := false,
 
   updateOptions := updateOptions.value.withCachedResolution(true)
@@ -82,9 +75,6 @@ val defaultLib = Seq(
       "org.slf4s"         %% "slf4s-api"                         % slf4sV,
       "ch.qos.logback"     % "logback-classic"                   % logbackV,
       "com.github.blemale" %% "scaffeine"                        % scaffeineVersion,
-      "com.cupenya"       %% "scala-common-mongo"                % scalaCommonV,
-      "com.cupenya"       %% "scala-common-kafka"                % scalaCommonV,
-      "com.cupenya"       %% "scala-common-http-client"          % scalaCommonV,
       "net.manub"         %% "scalatest-embedded-kafka" % "0.15.1",
       "org.slf4j"         %  "log4j-over-slf4j"         % "1.7.21")
       "org.specs2"        %% "specs2-core"                       % specs2Version    % Test,

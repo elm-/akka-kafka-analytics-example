@@ -8,7 +8,7 @@ import com.typesafe.scalalogging.StrictLogging
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.{ByteArraySerializer, StringSerializer}
 
-object Boot extends App with EventRoute with StrictLogging {
+object EventGatewayBoot extends App with EventRoute with StrictLogging {
   implicit val system = ActorSystem()
   implicit val ec = system.dispatcher
   implicit val materializer = ActorMaterializer()
