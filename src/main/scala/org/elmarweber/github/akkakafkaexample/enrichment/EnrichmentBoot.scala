@@ -5,6 +5,7 @@ import akka.http.scaladsl.Http
 import akka.kafka.{ConsumerSettings, ProducerSettings}
 import akka.stream.ActorMaterializer
 import com.typesafe.scalalogging.StrictLogging
+import kamon.Kamon
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.common.serialization.{ByteArrayDeserializer, StringDeserializer, StringSerializer}
 import org.elmarweber.github.akkakafkaexample.eventgateway.EventGatewayBoot.{eventRoute, logger}
@@ -14,6 +15,8 @@ object EnrichmentBoot extends App with StrictLogging {
   implicit val system = ActorSystem()
   implicit val ec = system.dispatcher
   implicit val materializer = ActorMaterializer()
+
+  Kamon.start()
 
   val consumerSettings = ConsumerSettings(system, new StringDeserializer, new StringDeserializer)
     .withBootstrapServers(EnrichmentConfiguration.kafka.bootstrapServers)

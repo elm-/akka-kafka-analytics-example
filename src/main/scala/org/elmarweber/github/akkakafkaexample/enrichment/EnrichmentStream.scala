@@ -1,23 +1,33 @@
 package org.elmarweber.github.akkakafkaexample.enrichment
 
+import java.net.InetAddress
+
 import akka.kafka.scaladsl.{Consumer, Producer}
 import akka.kafka.{ConsumerSettings, ProducerMessage, ProducerSettings, Subscriptions}
 import akka.stream.Materializer
 import akka.stream.scaladsl.Sink
 import com.typesafe.scalalogging.StrictLogging
+import kamon.Kamon
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.elmarweber.github.akkakafkaexample.lib.{AnalyticsEvent, EnrichedAnalyticsEvent}
 import spray.json._
 
 import scala.concurrent.{ExecutionContext, Future}
+import scala.util.Random
 
 trait EnrichmentStream extends StrictLogging {
   def createStream(consumerSettings: ConsumerSettings[String, String],
                    producerSettings: ProducerSettings[String, String],
                    sourceTopic: String, targetTopic: String)
                   (implicit fmt: Materializer, ec: ExecutionContext) = {
+    val metricTags = Map("jvm-host" -> InetAddress.getLocalHost().getHostName(), "instance-id" -> Random.nextInt(100).toString)
+    val latencyHistogram = Kamon.metrics.histogram("EnrichmentStream.latency", metricTags)
+    val consumedEventsCounter = Kamon.metrics.counter("EnrichmentStream.consumed-events", metricTags)
+
     Consumer.committableSource(consumerSettings, Subscriptions.topics(sourceTopic))
       .map { msg =>
+        latencyHistogram.record(System.currentTimeMillis() - msg.record.timestamp())
+        consumedEventsCounter.increment()
         (msg.record.value().parseJson.convertTo[AnalyticsEvent], msg.committableOffset)
       }
       .mapAsync(2) { case (event, offset) =>
