@@ -13,18 +13,9 @@ object EventGatewayBoot extends App with EventRoute with StrictLogging {
   implicit val ec = system.dispatcher
   implicit val materializer = ActorMaterializer()
 
-//  val producerSettings = ProducerSettings(system, new StringSerializer, new StringSerializer)
-//    .withBootstrapServers(EventGatewayConfiguration.kafka.bootstrapServers)
+//  Http().bindAndHandle(eventRoute, "0.0.0.0", 9090).transform(
+//    binding => logger.info(s"REST interface bound to ${binding.localAddress} "),
+//    { t => logger.error(s"Couldn't bind interface: ${t.getMessage}", t); sys.exit(1) }
+//  )
 
-  //val (queue, streamFuture) = EventsToKafkaStream.createStream(producerSettings, EventGatewayConfiguration.kafka.targetTopic)
-
-  Http().bindAndHandle(eventRoute, "0.0.0.0", 9090).transform(
-    binding => logger.info(s"REST interface bound to ${binding.localAddress} "),
-    { t => logger.error(s"Couldn't bind interface: ${t.getMessage}", t); sys.exit(1) }
-  )
-
-//  streamFuture.onFailure { case ex =>
-//    logger.error(s"Stream filed unexpectedly: ${ex.getMessage}", ex)
-//    sys.exit(1)
-//  }
 }
