@@ -1,0 +1,15 @@
+{
+  "name": "akka-kafka-analytics-example",
+  "recreateUpdate": true,
+  "services": [
+    {
+      "resource": "akka-kafka-analytics-example"
+    }
+  ],
+  "ports": [
+    {
+      "port": 80,
+      "targetPort": 9090
+    }
+  ]
+}
